@@ -1,0 +1,87 @@
+/* Import Roboto from Google Fonts */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --marimo-heading-font: 'Roboto', sans-serif;
+  }
+
+/* Base styling */
+body {
+    font-family: 'Roboto';;
+    line-height: 1.6;
+    font-size: 50px;
+    color: #222;
+    background-color: #fff;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    color: #111;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 2rem;
+}
+
+/* Highlight styles */
+.highlight-blue {
+    background-color: #e0f0ff;
+    color: #004080;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.highlight-green {
+    background-color: #e6ffe6;
+    color: #006600;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.highlight-yellow {
+    background-color: #fffdd0;
+    color: #7a6000;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.highlight-red {
+    background-color: #ffe6e6;
+    color: #b30000;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* Code blocks */
+code {
+    font-size: 0.95em;
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* Tables */
+table {
+    font-size: 1rem;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+th, td {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+}
+
+/* Add some spacing between sections */
+section {
+    margin-bottom: 2rem;
+}

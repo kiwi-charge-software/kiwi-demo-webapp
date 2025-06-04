@@ -4,7 +4,7 @@ __generated_with = "0.13.11"
 app = marimo.App(
     width="full",
     app_title="Kiwi Charge Demonstration",
-    css_file="/Users/jumana/Documents/code/python-notebooks/custom.css",
+    css_file="/Users/jumana/Documents/code/python-notebooks/marimo-demo/custom.css",
 )
 
 
