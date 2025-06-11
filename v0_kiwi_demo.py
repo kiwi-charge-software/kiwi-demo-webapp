@@ -271,12 +271,19 @@ def _(num_robots, total_cars):
 
     savings = fixed_cost - cost
     formatted_savings = f"${savings}"
-    return formatted_cost, formatted_fixed_cost
+
+    # if we don't use the "formatted cost" in the description for how much 
+    # the kiwi will cost, we can also use 0.4*fixed_cost
+
+    cost_percentage = fixed_cost*0.4
+    formatted_cost_percentage = f"${cost_percentage:,}"
+
+    return formatted_cost_percentage, formatted_fixed_cost
 
 
 @app.cell
 def _(
-    formatted_cost,
+    formatted_cost_percentage,
     formatted_fixed_cost,
     frac_charged_month,
     mo,
@@ -296,7 +303,7 @@ def _(
 
     ⏱️ Installing fixed chargers is a time intensive process, that takes anywhere between **12-24 months**. With Kiwi Charge, you will only need **1-3 business days** to electrify the entire parking lot!
 
-    💰 With {total_cars} cars on your parking lot, **your building would have needed {total_cars} level 2** fixed chargers, which would **cost you {formatted_fixed_cost} **in just hardware costs. However, **with Kiwi Charge**, you can **service the cars in your parking lot at level 3 speeds, at a complete price of {formatted_cost}** ({num_robots.value} kiwi bot(s)).
+    💰 With {total_cars} cars on your parking lot, **your building would have needed {total_cars} level 2** fixed chargers, which would **cost you {formatted_fixed_cost} **in just hardware costs. However, **with Kiwi Charge**, you can **service the cars in your parking lot at level 3 speeds, at a complete price of {formatted_cost_percentage}** ({num_robots.value} kiwi bot(s)).
     """
     )
     return
@@ -307,7 +314,9 @@ def _(mo):
     mo.md(
         r"""
     ### Assumptions for the model
-    * _Kiwi Operations: Kiwis are operating at random to charge the vehicles, and not doing so with the personalization that we have in our real bots_
+    _These simulation results are conservative for the following reasons_
+
+    * _Kiwi Operations: Kiwis are operating at random to charge the vehicles in this simulation. Therefore, estimates are extremely conservative. Real life charging will integrate AI-powered optimization._
     * _Kiwi Capacity: Units are 45-kW, and dispense/recharge themselves at Level 3 speeds_
     * _Price: We assume that the cost of one fixed level 2 charger is roughly $10,000 CAD (only hardware, excluding operations and utility costs)_
     """
