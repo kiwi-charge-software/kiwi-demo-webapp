@@ -23,10 +23,10 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     sim_duration = mo.ui.slider(label="Number of hours to run the simulation", show_value=True, start=1, stop=24)
-    num_robots = mo.ui.slider(label="Number of bots", show_value=True, start=1, stop=5)
-    cars_20 = mo.ui.slider(label="Number of cars that need 20% charge", show_value=True, start=0, stop=100)
-    cars_40 = mo.ui.slider(label="Number of cars that need 40% charge", show_value=True, start=0, stop=100)
-    cars_60 = mo.ui.slider(label="Number of cars that need 60% charge", show_value=True, start=0, stop=100)
+    num_robots = mo.ui.slider(label="Number of bots", show_value=True, start=1, stop=10)
+    cars_20 = mo.ui.slider(label="Number of cars that need 20% charge", show_value=True, start=0, stop=150)
+    cars_40 = mo.ui.slider(label="Number of cars that need 40% charge", show_value=True, start=0, stop=150)
+    cars_60 = mo.ui.slider(label="Number of cars that need 60% charge", show_value=True, start=0, stop=150)
     return cars_20, cars_40, cars_60, num_robots, sim_duration
 
 
@@ -34,34 +34,9 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-    # 🥝 Welcome to the Kiwi Charge Demo! 🥝
+    # ⚡ Welcome to the future of EV charging!
 
-    This simulation illustrates how Kiwi Charge's autonomous chargers replaces fixed chargers in your building. 
-
-    Set your parameters to see how many cars Kiwi can service, and your total cost for this infrastructure.
-    """
-    )
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(
-        r"""
-    ---
-    ## 🧠 Simulation Assumptions
-
-    This simulation is not perfect -- but it does assume the worst-case. Our more accurate models will include Kiwi smart charging capabilities, allowing it to charge more vehicles than it does in this simulation.
-
-    We assume:
-
-    1) Kiwis are operating at random to charge the vehicles-- there is no "smart" charging to _efficiently_ charge cars
-
-    2) Kiwi units are assumed to be a 45-kW unit, dispensing and recharging itself at Level 3 speeds
-
-    3) Vehicles are set to be at a consistent battery capacity (70 kWh) - there is no variation in user battery size.
-
-    4) All vehicles are present at the time of charging, and configured correctly - there's no missing/misconfigured vehicles.
+    This simulation illustrates how Kiwi Charge's autonomous chargers replaces fixed chargers in your building. Set your parameters to see how many cars Kiwi can service, and your total cost for this infrastructure.
     """
     )
     return
@@ -110,7 +85,20 @@ def _(simulation):
 
 
 @app.cell
-def _(num_robots, result):
+def _(cars_20, cars_40, cars_60, result):
+    # fraction of cars charged
+    total_cars = cars_20.value + cars_40.value + cars_60.value
+    frac_charged = sum(result[1])/total_cars
+
+    frac_charged = round(frac_charged, 2)*100
+
+    frac_charged_month = (sum(result[1])*3) /total_cars
+    frac_charged_month = round(frac_charged_month*100, 1)
+    return frac_charged_month, total_cars
+
+
+@app.cell
+def _(num_robots, total_cars):
     # kiwi cost calculation rq
     cost = 90
     if num_robots.value % 4 == 0:
@@ -121,51 +109,50 @@ def _(num_robots, result):
 
     formatted_cost = f"${cost:,}"
 
-    fixed_cost = sum(result[1])*10000
+    fixed_cost = total_cars*10000
     formatted_fixed_cost = f"${fixed_cost:,}"
 
     savings = fixed_cost - cost
     formatted_savings = f"${savings}"
-    return formatted_cost, formatted_fixed_cost, formatted_savings
+    return formatted_cost, formatted_fixed_cost
 
 
 @app.cell
 def _(
-    cars_20,
-    cars_40,
-    cars_60,
     formatted_cost,
     formatted_fixed_cost,
-    formatted_savings,
+    frac_charged_month,
     mo,
     num_robots,
     result,
+    total_cars,
 ):
     mo.md(
         f"""
     -----
 
-    ## 🤖 Simulation Results
+    ## 🥝 The Kiwi Charge Advantage
 
-    🥝 It took {num_robots.value} kiwi(s) {round(max(result[2]), 2)} hours to charge {sum(result[1])} unique cars.
+    ⚡ Within the **{round(max(result[2]), 2)} hours** that the simulation ran for, the **{num_robots.value} kiwi(s) were able to charge {sum(result[1])} unique cars in a day**. The Kiwi provided {sum(result[4])} kWh in total across all the cars, adding {round(sum(result[4])*0.16, 2)} km of range across the parking lot.
 
-    🚘 It was able to charge **{round((sum(result[1])/(cars_20.value + cars_40.value + cars_60.value))*100, 2)}**% of the cars on the parking lot.
+    🚗 In a month, {num_robots.value} kiwi(s) would service **{sum(result[1])*3} unique cars of the same charging needs, which is {frac_charged_month}% of your parking lot.**
 
-    ⚡ The Kiwi dispensed **{sum(result[4])}** kWh total.
+    ⏱️ Installing fixed chargers is a time intensive process, that takes anywhere between **12-24 months**. With Kiwi Charge, you will only need **1-3 business days** to electrify the entire parking lot!
 
-    ------
-    ## 💵 Cost breakdown
-
-    💰 If you had placed fixed chargers to service the {sum(result[1])} unique cars, it would have cost you **{formatted_fixed_cost}**.
-
-    🔖 With Kiwi Charge, you will be paying **{formatted_cost}** to service the same cars. This results in {formatted_savings} of savings for you!
+    💰 With {total_cars} cars on your parking lot, **your building would have needed {total_cars} level 2** fixed chargers, which would **cost you {formatted_fixed_cost} **in just hardware costs. However, **with Kiwi Charge**, you can **service the cars in your parking lot at level 3 speeds, at a complete price of {formatted_cost}** ({num_robots.value} kiwi bot(s)).
+    """
+    )
+    return
 
 
-    -----
-    ## ⏱️ Time breakdown
-    📉 Installing fixed chargers is a time intensive process, that takes anywhere between **12-24 months**. 
-
-    📈 With Kiwi Charge, you will only need **1-3 business days** to replace {sum(result[1])} fixed chargers!
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+    ### Assumptions for the model
+    * _Kiwi Operations: Kiwis are operating at random to charge the vehicles, and not doing so with the personalization that we have in our real bots_
+    * _Kiwi Capacity: Units are 45-kW, and dispense/recharge themselves at Level 3 speeds_
+    * _Price: We assume that the cost of one fixed level 2 charger is roughly $10,000 CAD (only hardware, excluding operations and utility costs)_
     """
     )
     return
