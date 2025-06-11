@@ -179,8 +179,8 @@ def _(random):
 
 @app.cell(hide_code=True)
 def _(mo):
-    sim_duration = mo.ui.slider(label="Number of hours to run the simulation", show_value=True, start=1, stop=24)
-    num_robots = mo.ui.slider(label="Number of bots", show_value=True, start=1, stop=10)
+    sim_duration = mo.ui.slider(label="Number of hours Kiwi is operational", show_value=True, start=1, stop=24)
+    num_robots = mo.ui.slider(label="Number of Kiwi bots", show_value=True, start=1, stop=10)
     cars_20 = mo.ui.slider(label="Number of cars that need 20% charge", show_value=True, start=0, stop=150)
     cars_40 = mo.ui.slider(label="Number of cars that need 40% charge", show_value=True, start=0, stop=150)
     cars_60 = mo.ui.slider(label="Number of cars that need 60% charge", show_value=True, start=0, stop=150)
@@ -208,7 +208,7 @@ def _(mo):
 
     Use the sliders below to set the following values: 
 
-    * Daily charging window (1 hour to 24 hours)
+    * Daily charging window (1 hour to 24 hours)- we recommend setting this to 12 hours to mimic overnight charging
     * Number of active Kiwis during the charging window
     * Number of vehicles that require 20%, 40%, and 60% charge
 
@@ -290,7 +290,7 @@ def _(
 
     ## 🥝 The Kiwi Charge Advantage
 
-    ⚡ Within the **{round(max(result[2]), 2)} hours** that the simulation ran for, the **{num_robots.value} kiwi(s) were able to charge {sum(result[1])} unique cars in a day**. The Kiwi provided {sum(result[4])} kWh in total across all the cars, adding {round(sum(result[4])*0.16, 2)} km of range across the parking lot.
+    ⚡ Within the **{round(max(result[2]), 2)} hours** that the simulation ran for, the **{num_robots.value} kiwi(s) were able to charge {sum(result[1])} unique cars in a day**. The Kiwi provided **{sum(result[4])} kWh** in total across all the cars, adding **{round(sum(result[4])*5, 2)} km of range** across the parking lot.
 
     🚗 In a month, {num_robots.value} kiwi(s) would service **{sum(result[1])*3} unique cars of the same charging needs, which is {frac_charged_month}% of your parking lot.**
 
