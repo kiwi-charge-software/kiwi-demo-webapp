@@ -16,3 +16,6 @@ See a screenshot of this below:
 
 ### Stack
 The raw simulation code can be found in `sim.py` and is written in Python. The visualizations are done on [marimo](https://marimo.io/) to run this simulation (easier than creating a tailwind/react native app for the first version.) The app will be hosted on github pages (for now). To run the app locally, run `marimo edit` after cloning this repo.
+
+### Publishing
+See workflows - Github actions will auto-publish the website when the notebook (`v0_kiwi_demo.py` is updated).
